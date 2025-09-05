@@ -23,12 +23,13 @@ import (
 
 /*
 ver.1.0.0 最初のリリース
+Ver.200100 go.modを作り直す
 */
 
 // Set EventID of Old Events That Don't Have EventID
 func main() {
 
-	const version = "1.0.0"
+	const version = "200100"
 
 	var err error
 
