@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Chouette2100/srdblib/v2"
+	// "github.com/Chouette2100/srdblib/v3"
 )
 
 type EventAndUser struct {
@@ -22,7 +22,7 @@ func SelectEventsThatDontHaveEventID() (eu []EventAndUser, err error) {
 	// Select all events that don't have an eventid
 	// The eventid is a 4-character string that starts with '@@@@'
 	var itfc []interface{}
-	itfc, err = srdblib.Dbmap.Select(&EventAndUser{}, sqlst)
+	itfc, err = Dbmap.Select(&EventAndUser{}, sqlst)
 	if err != nil {
 		err = fmt.Errorf("SelectEventsThatDontHaveEventID() failed: %v", err)
 		return

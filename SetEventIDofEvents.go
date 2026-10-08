@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/Chouette2100/srapi/v2"
-	"github.com/Chouette2100/srdblib/v2"
+	// "github.com/Chouette2100/srdblib/v3"
 )
 
 // SetEventIDofEvents sets the eventid of events that don't have an eventid
@@ -37,7 +37,7 @@ func SetEventIDofEvents(eu []EventAndUser) (err error) {
 		// Set the eventid of the event
 		var result sql.Result
 		sqlst := "UPDATE wevent SET eventid = ? WHERE ieventid = ?"
-		result, err = srdblib.Dbmap.Exec(sqlst, eventid, v.Ieventid)
+		result, err = Dbmap.Exec(sqlst, eventid, v.Ieventid)
 		if err != nil {
 			err = fmt.Errorf("Update() failed: %v", err)
 			return
@@ -63,7 +63,7 @@ func SetEventIDofEvents(eu []EventAndUser) (err error) {
 
 		// Set the eventid of the eventuser
 		sqlst = "UPDATE weventuser SET eventid = ? WHERE eventid = ? AND userno = ?"
-		result, err = srdblib.Dbmap.Exec(sqlst, eventid, fmt.Sprintf("@@@@%06d", v.Ieventid), v.Userno)
+		result, err = Dbmap.Exec(sqlst, eventid, fmt.Sprintf("@@@@%06d", v.Ieventid), v.Userno)
 		if err != nil {
 			err = fmt.Errorf("Update() failed: %v", err)
 			return

@@ -14,23 +14,30 @@ import (
 	"io"
 	"time"
 
-	"github.com/go-gorp/gorp"
 	"golang.org/x/crypto/ssh/terminal"
 
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-gorp/gorp"
+
 	"github.com/Chouette2100/srapi/v2"
-	"github.com/Chouette2100/srdblib/v2"
+	"github.com/Chouette2100/srdblib/v3"
 )
 
 /*
 ver.1.0.0 最初のリリース
 Ver.200100 go.modを作り直す
 Ver.200200 go.modを作り直す
+Ver.200300 srdblib/v2をsrdblib/v3に変更し、sops/age暗号化を導入する。
 */
+
+var Db *sql.DB
+var Dbmap *gorp.DbMap
 
 // Set EventID of Old Events That Don't Have EventID
 func main() {
 
-	const version = "200200"
+	const version = "200300"
 
 	var err error
 
@@ -100,7 +107,8 @@ func main() {
 
 	// >>>>>>>>>>>>>>>>>>>>>
 	// データベース接続
-	dbconfig, err := srdblib.OpenDb("DBConfig.yml")
+	var dbconfig *srdblib.DBConfig
+	Db, dbconfig, err = srdblib.OpenDb("DBConfig.enc.yml")
 	if err != nil {
 		log.Printf("Database error. err = %v\n", err)
 		return
@@ -108,15 +116,15 @@ func main() {
 	if dbconfig.UseSSH {
 		defer srdblib.Dialer.Close()
 	}
-	defer srdblib.Db.Close()
+	defer Db.Close()
 
 	dial := gorp.MySQLDialect{Engine: "InnoDB", Encoding: "utf8mb4"}
-	srdblib.Dbmap = &gorp.DbMap{Db: srdblib.Db,
+	Dbmap = &gorp.DbMap{Db: Db,
 		Dialect:         dial,
 		ExpandSliceArgs: true, //スライス引数展開オプションを有効化する
 	}
-	srdblib.Dbmap.AddTableWithName(srdblib.Wevent{}, "wevent").SetKeys(false, "Eventid")
-	srdblib.Dbmap.AddTableWithName(srdblib.Weventuser{}, "weventuser").SetKeys(false, "Eventid", "Userno")
+	Dbmap.AddTableWithName(srdblib.Wevent{}, "wevent").SetKeys(false, "Eventid")
+	Dbmap.AddTableWithName(srdblib.Weventuser{}, "weventuser").SetKeys(false, "Eventid", "Userno")
 	// <<<<<<<<<<<<<<<<<<<<
 
 	for i := 0; i < 10; i++ {

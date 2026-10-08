@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go build",
+            "type": "shell",
+            "options": {
+                "env": {
+                  "CGO_ENABLED": "0",
+                }
+            },
+            "command": "go",
+            "args": [
+                "build",
+                "-v",
+                "./..."
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "go install",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "install",
+                "-v",
+                "./..."
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
