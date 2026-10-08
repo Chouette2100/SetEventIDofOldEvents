@@ -24,12 +24,13 @@ import (
 /*
 ver.1.0.0 最初のリリース
 Ver.200100 go.modを作り直す
+Ver.200200 go.modを作り直す
 */
 
 // Set EventID of Old Events That Don't Have EventID
 func main() {
 
-	const version = "200100"
+	const version = "200200"
 
 	var err error
 
@@ -64,7 +65,7 @@ func main() {
 	// <<<<<<<<<<<<<<<<<<<<
 
 	// Print the Go version
-	log.Println("You are using", runtime.Compiler, "compiler")
+	// log.Println("You are using", runtime.Compiler, "compiler")
 	log.Println("on a", runtime.GOARCH, "machine")
 	log.Println("with Go version", runtime.Version())
 
@@ -119,7 +120,7 @@ func main() {
 	// <<<<<<<<<<<<<<<<<<<<
 
 	for i := 0; i < 10; i++ {
-		// SRCGIから起動されてケースではまだイベントが作成されていない場合があるためウェイトする
+		// SRCGIから起動されたケースではまだイベントが作成されていない場合があるためウェイトする
 		time.Sleep(time.Duration(i) * time.Second)
 
 		// Select all events that don't have an eventid
